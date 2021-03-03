@@ -18,11 +18,20 @@ package com.example.androiddevchallenge
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.example.androiddevchallenge.model.defaultPets
+import com.example.androiddevchallenge.ui.common.Toolbar
+import com.example.androiddevchallenge.ui.detail.PetDetailsView
+import com.example.androiddevchallenge.ui.list.PetsListView
 import com.example.androiddevchallenge.ui.theme.MyTheme
 
 class MainActivity : AppCompatActivity() {
@@ -39,8 +48,14 @@ class MainActivity : AppCompatActivity() {
 // Start building your app here!
 @Composable
 fun MyApp() {
-    Surface(color = MaterialTheme.colors.background) {
-        Text(text = "Ready... Set... GO!")
+    val navController = rememberNavController()
+    Column(modifier = Modifier.fillMaxSize()) {
+        Toolbar(navController, remember { mutableStateOf(false) })
+
+        NavHost(navController, startDestination = "petsList") {
+            composable("petsList") { PetsListView(defaultPets, navController) }
+            composable("petDetails") { PetDetailsView(navController) }
+        }
     }
 }
 
